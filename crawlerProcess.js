@@ -10,6 +10,7 @@ var nounSet = new Set();
 var verbSet = new Set();
 var topicSet = new Set();
 var peopleSet = new Set();
+var urlSet = new Set();
 const mongoose = require('mongoose');
 const dev_db_url = 'mongodb://heliosapp:admin2018@ds045622.mlab.com:45622/helios';
 const mongoDB = process.env.MONGODB_URI || dev_db_url;
@@ -37,11 +38,23 @@ function parseData(result) {
 
     $('p').each(function (i, element) {
         var content = $(this).prev();
-        var element = content.text().replace(/\n/g, '').replace(/ *\[[^\]]*]+/, '').split(/[.?!]/);
+        var item = content.text().replace(/\n/g, '').replace(/ *\[[^\]]*]+/, '').split(/[.?!]/);
 
         for (var k = 0; k < element.length; k++)
-            if (element[k].indexOf(" ") > 0)
+            if (item[k].indexOf(" ") > 0)
                 transitionArray.push(element[k]);
+    });
+
+
+    $('a').each(function (i, link) {
+        var urlAddress = new String($(link).attr('href'));
+
+        if(urlAddress.includes("https://en.wikipedia.org")){
+            urlSet.add(urlAddress.replace("String",""));
+        }
+        if(urlAddress.startsWith("/wiki")){
+            urlSet.add("https://en.wikipedia.org" + urlAddress.replace("String",""));
+        }
     });
 
     for (var j = 0; j < transitionArray.length; j++) {
@@ -67,8 +80,8 @@ function parseData(result) {
         }
     }
     //sentenceArray = transitionArray;
-    //console.log(sentenceArray);
-    console.log([sentenceArray, nounSet, verbSet, topicSet, peopleSet]);
+    console.log(urlSet);
+    //console.log([sentenceArray, nounSet, verbSet, topicSet, peopleSet, urlSet]);
 }
 
 function instantiateEntity(id, name, target, category) {
@@ -115,8 +128,8 @@ function retrieveEntity(){
     });
 }
 
-instantiateEntity(7, "test", 1, "new");
-retrieveEntity();
+//instantiateEntity(7, "test", 1, "new");
+//retrieveEntity();
 
 processData('https://en.wikipedia.org/wiki/Proteus').then(result => {
     parseData(result);
