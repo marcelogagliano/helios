@@ -68,7 +68,7 @@ function parseData(result) {
     }
     //sentenceArray = transitionArray;
     //console.log(sentenceArray);
-    console.log([sentenceArray, nounSet, verbSet, topicSet, peopleSet]);gi
+    console.log([sentenceArray, nounSet, verbSet, topicSet, peopleSet]);
 }
 
 function instantiateEntity(id, name, target, category) {
