@@ -4,6 +4,7 @@
 #git config --global credential.helper "cache --timeout 7200"
 git add .
 git commit -m "$@"
+#git remote rm origin
 #git remote add origin https://github.com/marcelogagliano/helios.git
 git remote -v
 git push origin master
